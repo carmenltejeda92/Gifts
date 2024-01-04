@@ -5,6 +5,7 @@ const app = express()
 const fs = require('fs')
 const giftsss = require('./models/gifts')
 const gifts = require('./models/gifts')
+const Gift = require('./models/gift')
 const mongoose = require('mongoose')
 
 
@@ -30,8 +31,8 @@ app.get("/", (req, res)=>{
 
 //--------------------[Index]
 app.get("/gifts", (req, res)=>{
-    res.render('Index',{
-        gifts: giftsss
+    Gift.find({}, (err, allGifts)=>{
+        gifts: allGifts
     })
 })
 
@@ -47,9 +48,11 @@ app.post('/gifts',(req, res)=>{
     }else{
         req.body.NaughtyOrNice = false
     }
-    giftsss.push(req.body)
+    Gift.create(req.body, (err, createdGift)=>{
+        console.log("Created Gift: ", req.body)
+        res.redirect('/gifts')
+    })
     console.log(req.body)
-    res.redirect('/gifts')
 })
 
 
