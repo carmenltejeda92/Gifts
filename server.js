@@ -10,22 +10,33 @@ app.set("view engine", "jsx")
 app.engine("jsx", require("express-react-views").createEngine())
 app.use(express.urlencoded({extended:false}))
 
+app.use((req, res, next)=>{
+    console.log("I run for all routes")
+    next()
+})
+
 //-------------------[Routes]
 app.get("/", (req, res)=>{
     res.render("Home")
 })
 
+//--------------------[Index]
 app.get("/gifts", (req, res)=>{
     res.render('Index',{
         gifts: giftsss
     })
 })
 
-
-//--------------------[Index]
+//--------------------[New]
 app.get('/gifts/new', (req, res)=>{
     res.render('New')
 })
+
+//--------------------[Show]
+app.post('/gifts',(req, res)=>{
+    res.send('Hi!')
+})
+
 
 app.get('/gifts/:indexOfGiftArray', (req, res)=>{
     res.render('Show', {
