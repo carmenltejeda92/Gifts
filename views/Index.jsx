@@ -8,6 +8,9 @@ function Index(props) {
             return <li><a href={`/gifts/${i}`}>{gift.name}</a></li>
         })}</h3>
         </ul>
+        <nav>
+          <a href='/gifts/new'><h4>Add to Gift List</h4></a>
+        </nav>
     </div>
   )
 }

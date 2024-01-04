@@ -3,6 +3,7 @@ const express = require('express')
 const app = express()
 const fs = require('fs')
 const giftsss = require('./models/gifts')
+const gifts = require('./models/gifts')
 
 
 // -------------------[Middleware]
@@ -34,7 +35,14 @@ app.get('/gifts/new', (req, res)=>{
 
 //--------------------[Show]
 app.post('/gifts',(req, res)=>{
-    res.send('Hi!')
+    if(req.body.NaughtyOrNice === 'on'){
+        req.body.NaughtyOrNice = true
+    }else{
+        req.body.NaughtyOrNice = false
+    }
+    giftsss.push(req.body)
+    console.log(req.body)
+    res.redirect('/gifts')
 })
 
 
