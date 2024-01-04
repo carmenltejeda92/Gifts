@@ -11,23 +11,36 @@ app.engine("jsx", require("express-react-views").createEngine())
 app.use(express.urlencoded({extended:false}))
 
 //-------------------[Routes]
-// app.get("/", (req, res)=>{
-//     res.send("<h1>Hello Bish</h1>")
-// })
-
 app.get("/", (req, res)=>{
     res.render("Home")
 })
 
+app.get("/gifts", (req, res)=>{
+    res.render('Index',{
+        gifts: giftsss
+    })
+})
+
+
+//--------------------[Index]
+app.get('/gifts/new', (req, res)=>{
+    res.render('New')
+})
+
+app.get('/gifts/:indexOfGiftArray', (req, res)=>{
+    res.render('Show', {
+        gift: giftsss[req.params.indexOfGiftArray]
+    })
+})
 
 // if statement to display if something's at that index of the array
-app.get('/:indexOfGiftArray', (req, res)=>{
-    if(giftsss[req.params.indexOfGiftArray]){
-        res.send(giftsss[req.params.indexOfGiftArray])
-    }else{
-        res.send('There are no more items in Santas bag here ' + req.params.indexOfGiftArray)
-    }
-})
+// app.get('/:indexOfGiftArray', (req, res)=>{
+//     if(giftsss[req.params.indexOfGiftArray]){
+//         res.send(giftsss[req.params.indexOfGiftArray])
+//     }else{
+//         res.send('There are no more items in Santas bag here ' + req.params.indexOfGiftArray)
+//     }
+// })
 
 //--------------------[Server]
 app.listen("3000", (req, res)=>{
