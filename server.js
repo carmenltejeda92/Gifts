@@ -5,6 +5,7 @@ const app = express()
 const fs = require('fs')
 const giftsss = require('./models/gifts')
 const gifts = require('./models/gifts')
+const mongoose = require('mongoose')
 
 
 // -------------------[Middleware]
@@ -15,6 +16,11 @@ app.use(express.urlencoded({extended:false}))
 app.use((req, res, next)=>{
     console.log("I run for all routes")
     next()
+})
+
+mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connection.once('open', ()=>{
+    console.log('connected to mongo')
 })
 
 //-------------------[Routes]
