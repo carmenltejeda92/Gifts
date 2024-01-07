@@ -3,15 +3,15 @@ require('dotenv').config()
 const express = require('express')
 const app = express()
 const fs = require('fs')
-const giftsss = require('./models/gifts')
-const gifts = require('./models/gifts')
 const Gift = require('./models/gift')
 const mongoose = require('mongoose')
+const methodOverride = require('method-override')
 
 
 // -------------------[Middleware]
 app.set("view engine", "jsx")
 app.engine("jsx", require("express-react-views").createEngine())
+app.use(methodOverride('_method'))
 app.use(express.urlencoded({extended:false}))
 
 app.use((req, res, next)=>{
@@ -29,10 +29,12 @@ app.get("/", (req, res)=>{
     res.render("Home")
 })
 
-//--------------------[Index]
+//--------------------[Index [R]]
 app.get("/gifts", (req, res)=>{
     Gift.find({}, (err, allGifts)=>{
-        gifts: allGifts
+        res.render('Index',{
+            gifts: allGifts
+        })
     })
 })
 
@@ -41,7 +43,7 @@ app.get('/gifts/new', (req, res)=>{
     res.render('New')
 })
 
-//--------------------[Show]
+//--------------------[POST [C]]
 app.post('/gifts',(req, res)=>{
     if(req.body.NaughtyOrNice === 'on'){
         req.body.NaughtyOrNice = true
@@ -55,10 +57,45 @@ app.post('/gifts',(req, res)=>{
     console.log(req.body)
 })
 
+//--------------------[Edit [U]]
+app.get('/gifts/:id/edit', (req, res)=>{
+    Gift.findById(req.params.id, (err, foundGift)=>{
+        if(!err){
+            res.render('Edit', {
+                gift: foundGift
+            })
+        }else{
+            res.send({msg: err.messge})
+        }
+    })
+})
 
-app.get('/gifts/:indexOfGiftArray', (req, res)=>{
-    res.render('Show', {
-        gift: giftsss[req.params.indexOfGiftArray]
+//--------------------[PUT/PATCH [U]]
+app.put('/gifts/:id', (req, res)=>{
+    if(req.body.NaughtyOrNice === 'on'){
+        req.body.NaughtyOrNice == true
+    }else{
+        req.body.NaughtyOrNice = false
+    }
+    Gift.findByIdAndUpdate(req.params.id, req.body, (err, updatedGift)=>{
+        console.log(updatedGift)
+        res.redirect(`/gifts/${req.params.id}`)
+    })
+})
+
+//--------------------[Delete [D]]
+app.delete('/gifts/:id', (req, res)=>{
+    Gift.findByIdAndRemove(req.params.id,(err, data)=>{
+        res.redirect('/gifts')
+    })
+})
+
+//--------------------[Show]
+app.get('/gifts/:id', (req, res)=>{
+    Gift.findById(req.params.id, (err, foundGift)=>{
+        res.render('Show', {
+            gift: foundGift
+        })
     })
 })
 

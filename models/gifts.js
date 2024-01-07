@@ -21,15 +21,5 @@ const gifts = [
     }
 ]
 
-// const mongoose = require('mongoose')
-
-// const giftSchema = new mongoose.Schema({
-//     name: {type: String, required: true},
-//     color: {type: String, required: true}
-// })
-
-// const Gift = mongoose.model('Gift', giftSchema)
-
-
 
 module.exports = gifts
